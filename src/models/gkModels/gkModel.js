@@ -11,7 +11,6 @@ const qaSchema = new Schema({
     title: { type: String, required: true },
     description: { type: String },
     qaPairs: [qaSchema],  // Nested Q&A pairs
-    order: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now }
   }, { _id: true });
 

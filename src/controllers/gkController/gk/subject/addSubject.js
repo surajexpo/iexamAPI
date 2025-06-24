@@ -1,4 +1,4 @@
-const GkSubject=require('../../../models/gkModels')
+const GkSubject=require('../../../../models/gkModels')
 const addSubject = async(req,res)=>{
 try{
     console.log('chala');

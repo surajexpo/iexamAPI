@@ -3,6 +3,7 @@ const unspecifiedRoutesHandler = require('./unspecified.route');
 const { finalErrorHandler } = require('../errorHandler');
 const userRoute = require('./user.route.js');
 const adminRoute = require('./admin.route.js');
+const gkRoute=require('./gk.route.js');
 const router = require('./auth.route.js');
 
 const appRoutes = (app) => {
@@ -14,6 +15,7 @@ const appRoutes = (app) => {
   app.use('/user', userRoute);
   app.use('/admin', adminRoute);
   app.use('/api', router);
+  app.use('/gk',gkRoute);
   app.use(unspecifiedRoutesHandler);
   app.use(finalErrorHandler);
 };

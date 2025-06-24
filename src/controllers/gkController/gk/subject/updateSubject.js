@@ -1,6 +1,7 @@
-const GkSubject = require('../../../models/gkModels');
+const GkSubject = require("../../../../models/gkModels");
 
 const updateSubject = async (req, res) => {
+  GkSubject
   try {
     const { subjectId } = req.params;
     const { name, description, isActive } = req.body;

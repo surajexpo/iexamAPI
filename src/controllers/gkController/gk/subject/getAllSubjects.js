@@ -1,4 +1,5 @@
-const GkSubject = require('../../../models/gkModels');
+
+const GkSubject = require("../../../../models/gkModels");
 
 const getAllSubjects = async (req, res) => {
   try {

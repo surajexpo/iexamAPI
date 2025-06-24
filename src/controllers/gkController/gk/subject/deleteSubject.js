@@ -1,4 +1,4 @@
-const GkSubject = require('../../../models/gkModels');
+const GkSubject = require('../../../../models/gkModels');
 
 const deleteSubject = async (req, res) => {
   try {

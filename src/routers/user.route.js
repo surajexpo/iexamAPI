@@ -1,6 +1,5 @@
 const userRoute = require("express").Router();
 const { profile, updateProfile, sendOTP, verifyOTP, signup,login } = require("../controllers/userController");
-// const login = require("../controllers/userController/auth/login");
 const { authenticateUser, fileUploader } = require("../middlewares");
 
 //---------- user auth ----------

@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const qaSchema = new Schema({
     question: { type: String, required: true },
     answer: { type: String, required: true },
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
+    createdBy: { type: Schema.Types.ObjectId,required:true, ref: 'User' },
     lastUpdated: { type: Date, default: Date.now }
   }, { _id: true });
   const headingSchema = new Schema({

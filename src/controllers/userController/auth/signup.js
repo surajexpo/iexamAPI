@@ -1,7 +1,5 @@
 const {User} = require("../../../models/authModels");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const generateToken = require("../../../utils/generateToken");
+const {generateToken} = require("../../../utils/generateToken");
 const signup = async(req, res)=>{
 try{
     const mustData={
@@ -21,13 +19,8 @@ try{
     if(req.body.phone){
         mustData.phone = req.body.phone
     }
-    // const hashedPassword = bcrypt.hashSync(mustData.password,10);
-    // mustData.password = hashedPassword;
-
     const data = new User(mustData);
     await data.save();
-
-    // const token = jwt.sign({_id:data._id},"yahaSecretDalnaHai.envSE");
     const token = generateToken({_id:data._id});
 
     return res.status(201).json({status:true, result:{data,token}, message:"sexfully signup"})

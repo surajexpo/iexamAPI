@@ -8,7 +8,7 @@ const passport =  require('./config/passport.js');
 const app = express();
 app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(express.json({ limit: "100kb" }));
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:4200' }));
 app.use(morgan("dev"));
 const session = require('express-session');
 app.use(session({

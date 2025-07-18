@@ -19,7 +19,6 @@ gkRoute.get("/getAllSubject", getAllSubjects);
 gkRoute.post("/addSubject", addSubject);
 gkRoute.put("/updateSubject/:subjectId", updateSubject);
 gkRoute.delete("/deleteSubject/:subjectId", deleteSubject);
-gkRoute.get("/getSubjectById/:subjectId", deleteSubject);
 //heading routes
 gkRoute.get("/gkSubject/:subjectId/getAllHeadings",getAllGkHeadings)
 gkRoute.post("/gkSubject/:subjectId/addHeading", addGkHeading);

@@ -10,7 +10,6 @@ adminRoute.post("/register", authenticateAdmin, register);
 adminRoute.post("/login", login)
 adminRoute.get("/profile", authenticateAdmin, profile);
 adminRoute.put("/update", authenticateAdmin, update);
-adminRoute.post("/register", authenticateAdmin, register);
 
 //forget password
 adminRoute.post("/forgetPassword", forgetPassword);

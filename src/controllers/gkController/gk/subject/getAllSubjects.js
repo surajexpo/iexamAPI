@@ -1,21 +1,22 @@
-
 const GkSubject = require("../../../../models/gkModels");
 
 const getAllSubjects = async (req, res) => {
   try {
     const subjects = await GkSubject.find({}, 'name description isActive createdAt updatedAt');
 
-    return res.status(200).json({
-      status: true,
-      data: subjects,
-      message: 'Subjects fetched successfully',
+    res.status(200).json({
+      success: true,
+      message: 'Subjects fetched successfully.',
+      data: subjects
     });
   } catch (error) {
-    return res.status(500).json({
-      status: false,
-      message: error.message,
+    console.error('Error fetching subjects:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching subjects.',
+      error: error.message
     });
   }
 };
 
-module.exports = getAllSubjects;
+module.exports =  getAllSubjects ;

@@ -1,30 +1,41 @@
+const mongoose = require('mongoose');
 const GkSubject = require('../../../../models/gkModels');
 
 const deleteSubject = async (req, res) => {
   try {
     const { subjectId } = req.params;
 
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(subjectId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid subjectId.',
+      });
+    }
+
     const deletedSubject = await GkSubject.findByIdAndDelete(subjectId);
 
     if (!deletedSubject) {
       return res.status(404).json({
-        status: false,
-        message: 'Subject not found',
+        success: false,
+        message: 'Subject not found.',
       });
     }
 
-    return res.status(200).json({
-      status: true,
+    res.status(200).json({
+      success: true,
+      message: 'Subject deleted successfully.',
       data: deletedSubject,
-      message: 'Subject deleted successfully',
     });
 
   } catch (error) {
-    return res.status(500).json({
-      status: false,
-      message: error.message,
+    console.error('Error deleting subject:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while deleting subject.',
+      error: error.message,
     });
   }
 };
 
-module.exports = deleteSubject;
+module.exports =  deleteSubject ;

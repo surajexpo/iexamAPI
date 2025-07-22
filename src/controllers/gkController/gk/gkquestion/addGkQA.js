@@ -1,44 +1,63 @@
+const mongoose = require('mongoose');
 const GkSubject = require('../../../../models/gkModels');
-const User=require('../../../../models/authModels/userModel')
+const User = require('../../../../models/authModels/userModel');
+
 const addQuestionAnswer = async (req, res) => {
   try {
     const { subjectId, headingId } = req.params;
     const { question, answer, createdBy } = req.body;
-    if (!question || !answer) {
+
+    // Validate ObjectIds
+    if (!mongoose.Types.ObjectId.isValid(subjectId) ||
+        !mongoose.Types.ObjectId.isValid(headingId) ||
+        (createdBy && !mongoose.Types.ObjectId.isValid(createdBy))) {
       return res.status(400).json({
-        status: false,
-        message: "Question and Answer are required",
+        success: false,
+        message: 'Invalid subjectId, headingId, or createdBy.',
       });
     }
-    if (createdBy) {
-        const userExists = await User.findById(createdBy);
-        if (!userExists) {
-          return res.status(400).json({
-            status: false,
-            message: "Invalid createdBy: User not found",
-          });
-        }
-      }
 
+    // Validate required fields
+    if (!question || !answer) {
+      return res.status(400).json({
+        success: false,
+        message: "Question and Answer are required.",
+      });
+    }
+
+    // Validate createdBy user
+    if (createdBy) {
+      const userExists = await User.findById(createdBy);
+      if (!userExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid createdBy: User not found.",
+        });
+      }
+    }
+
+    // Find subject
     const subject = await GkSubject.findById(subjectId);
     if (!subject) {
       return res.status(404).json({
-        status: false,
-        message: "Subject not found",
+        success: false,
+        message: "Subject not found.",
       });
     }
+
+    // Find heading
     const heading = subject.headings.id(headingId);
     if (!heading) {
       return res.status(404).json({
-        status: false,
-        message: "Heading not found",
+        success: false,
+        message: "Heading not found.",
       });
     }
 
     // Add the Q&A pair
     const newQAPair = {
-      question,
-      answer,
+      question: question.trim(),
+      answer: answer.trim(),
       createdBy: createdBy || null,
       lastUpdated: new Date()
     };
@@ -48,16 +67,19 @@ const addQuestionAnswer = async (req, res) => {
     await subject.save();
 
     return res.status(201).json({
-      status: true,
-      data: newQAPair,
-      message: "Q&A added successfully",
+      success: true,
+      message: "Q&A added successfully.",
+      data: newQAPair
     });
 
   } catch (error) {
+    console.error('Error adding Q&A:', error);
     return res.status(500).json({
-      status: false,
-      message: error.message,
+      success: false,
+      message: 'Server error while adding Q&A.',
+      error: error.message
     });
   }
 };
-module.exports = addQuestionAnswer;
+
+module.exports =  addQuestionAnswer ;

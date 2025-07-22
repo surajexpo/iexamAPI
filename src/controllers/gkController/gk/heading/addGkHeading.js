@@ -1,61 +1,76 @@
-const GkSubject=require('../../../../models/gkModels')
+const mongoose = require('mongoose');
+const GkSubject = require('../../../../models/gkModels');
 
 const addGkHeading = async (req, res) => {
   try {
     const { subjectId } = req.params;
     const { title, description, order } = req.body;
 
-    if (!title) {
+    // Validate subjectId
+    if (!mongoose.Types.ObjectId.isValid(subjectId)) {
       return res.status(400).json({
-        status: false,
-        message: "Heading title is required",
+        success: false,
+        message: 'Invalid subjectId.',
       });
     }
 
+    // Validate required field
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: "Heading title is required.",
+      });
+    }
+
+    // Find subject
     const subject = await GkSubject.findById(subjectId);
     if (!subject) {
       return res.status(404).json({
-        status: false,
-        message: "Subject not found",
+        success: false,
+        message: "Subject not found.",
       });
     }
 
-    // 🔍 Check for duplicate heading title (case-insensitive)
+    // Check for duplicate heading (case-insensitive)
     const existingHeading = subject.headings.find(
-      h => h.title.toLowerCase().trim() === title.toLowerCase().trim()
+      h => h.title.trim().toLowerCase() === title.trim().toLowerCase()
     );
 
     if (existingHeading) {
       return res.status(409).json({
-        status: false,
-        message: "Heading with this title already exists in the subject",
+        success: false,
+        message: "Heading with this title already exists in the subject.",
       });
     }
 
-    // ✅ If no duplicate, add heading
+    // Create new heading
     const newHeading = {
-      title,
-      description: description || '',
+      title: title.trim(),
+      description: description?.trim() || '',
       qaPairs: [],
       order: order || 0,
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     subject.headings.push(newHeading);
+    subject.updatedAt = new Date();
     await subject.save();
 
-    return res.status(201).json({
-      status: true,
-      data: newHeading,
-      message: "Heading added successfully",
+    res.status(201).json({
+      success: true,
+      message: "Heading added successfully.",
+      data: newHeading
     });
 
   } catch (error) {
-    return res.status(500).json({
-      status: false,
-      message: error.message,
+    console.error('Error adding heading:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while adding heading.',
+      error: error.message,
     });
   }
 };
 
-module.exports = addGkHeading;
+module.exports =  addGkHeading ;

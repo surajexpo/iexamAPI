@@ -5,6 +5,7 @@ const userRoute = require('./user.route.js');
 const adminRoute = require('./admin.route.js');
 const gkRoute=require('./gk.route.js');
 const router = require('./auth.route.js');
+const quizRoute = require('./quiz.route.js');
 
 const appRoutes = (app) => {
   app.get('/api/ping', (_, res) =>
@@ -16,6 +17,7 @@ const appRoutes = (app) => {
   app.use('/admin', adminRoute);
   app.use('/api', router);
   app.use('/gk',gkRoute);
+  app.use('/quiz', quizRoute);
   app.use(unspecifiedRoutesHandler);
   app.use(finalErrorHandler);
 };

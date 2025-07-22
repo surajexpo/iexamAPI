@@ -2,8 +2,9 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { connectToDatabase } = require('./connection');
 const app = require('./src/app.js');
+const PORT = process.env.PORT || 1003;
+const BASE_URL = `http://localhost:${PORT || 1003}`;
 
-const { PORT, BASE_URL } = process.env;
 
 (async () => {
   try {

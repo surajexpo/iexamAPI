@@ -13,20 +13,30 @@ const getAllGkHeadings = async (req, res) => {
       });
     }
 
-    const subject = await GkSubject.findById(subjectId).select('name headings');
+    // const subject = await GkSubject.findById(subjectId).select('name headings');
+    const subject = await GkSubject.findById(subjectId)
+  .select('name headings.title headings.description headings.createdAt headings._id'); // exclude qaPairs
+
     if (!subject) {
       return res.status(404).json({
         success: false,
         message: 'Subject not found.',
       });
     }
+const headings = subject.headings.map(h => ({
+  _id: h._id,
+  title: h.title,
+  description: h.description,
+  createdAt: h.createdAt
+}));
+res.status(200).json({
+  success: true,
+  message: 'Headings fetched successfully.',
+  subjectName: subject.name,
+  data: headings
+});
 
-    res.status(200).json({
-      success: true,
-      message: 'Headings fetched successfully.',
-      subjectName: subject.name,
-      data: subject.headings
-    });
+    
 
   } catch (error) {
     console.error('Error fetching headings:', error);

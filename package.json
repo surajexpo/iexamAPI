@@ -1,5 +1,5 @@
 {
-  "name": "jussto",
+  "name": "iexam",
   "version": "1.0.0",
   "description": "e-commerce",
   "main": "index.js",
@@ -13,7 +13,12 @@
     "url": "https://github.com/suresh-dev143/justto_backend.git"
   },
   "keywords": [
-    "sex"
+    "iexam",
+    "nodejs",
+    "backend",
+    "express",
+    "mongodb",
+    "mongo"
   ],
   "author": "suresh",
   "license": "ISC",

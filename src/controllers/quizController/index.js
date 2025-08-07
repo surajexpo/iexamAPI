@@ -6,6 +6,7 @@ const addQuestionToQuiz = require("./question/addQuestion");
 const updateQuizQuestion = require("./question/updateQuizQuestion");
 const getAllQuizQuestions = require("./question/getAllQuizQuestions");
 const deleteQuestion= require("./question/deleteQuestion");
+const getQuizById = require("./quiz/getQuizById");
 
 module.exports = {
  addQuiz,
@@ -15,5 +16,6 @@ module.exports = {
  addQuestionToQuiz,
  updateQuizQuestion,
  getAllQuizQuestions,
- deleteQuestion
+ deleteQuestion,
+ getQuizById
 };

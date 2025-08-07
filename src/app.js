@@ -37,6 +37,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something broke!' });
+});
 
 // Routes
 appRoutes(app);
@@ -61,5 +65,7 @@ async function admin() {
         console.log("Admin already exists");
     }
 } 
-
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
 module.exports = app;

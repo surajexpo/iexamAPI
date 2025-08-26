@@ -1,34 +1,57 @@
-const {User} = require("../../../models/authModels");
-const {generateToken} = require("../../../utils/generateToken");
-const signup = async(req, res)=>{
-try{
-    const mustData={
-        email:req.body.email,
-        password:req.body.password,
-        name:req.body.name
-    };
-    // for(let key of mustData){
-    //     if(![key] || [key] =='' ){
-    //       throw  new Error(`${key} is required`, 404); 
-    //     }
-    // }
-    const isExist = await User.findOne({email:mustData.email}).lean();
-    if(isExist){
-        throw new Error('email is already exist ', 403);
+const { User } = require("../../../models/authModels");
+const { generateToken } = require("../../../utils/generateToken");
+const bcrypt = require("bcrypt");
+
+const signup = async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+
+    // Basic validation
+    if (!email || !password ) {
+      return res.status(400).json({
+        status: false,
+        message: "Email and password are required",
+      });
     }
-    if(req.body.phone){
-        mustData.phone = req.body.phone
+
+    // Check if user already exists
+    const isExist = await User.findOne({ email }).lean();
+    if (isExist) {
+      return res.status(409).json({
+        status: false,
+        message: "Email already exists",
+      });
     }
-    const data = new User(mustData);
-    await data.save();
-    const token = generateToken({_id:data._id});
 
-    return res.status(201).json({status:true, result:{data,token}, message:"sexfully signup"})
+    const userData = new User({
+      email,
+      password,
+      name,
+      
+    });
 
+    await userData.save();
 
-  }catch(err){
-  res.status(500).json({status:false, error:err.message})
+    // Generate token
+    const token = generateToken({ _id: userData._id });
+
+    return res.status(201).json({
+      status: true,
+      message: "Successfully signed up",
+      result: {
+        user: {
+          _id: userData._id,
+          name: userData.name,
+          email: userData.email,
+        
+        },
+        token,
+      },
+    });
+  } catch (err) {
+    console.error("Signup Error:", err);
+    res.status(500).json({ status: false, error: err.message });
   }
-}
+};
 
 module.exports = signup;

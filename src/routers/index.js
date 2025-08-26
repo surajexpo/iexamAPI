@@ -14,7 +14,7 @@ const appRoutes = (app) => {
   );
   app.use('/public', express.static('public'));
 
-  app.use('/user', userRoute);
+  app.use('/users', userRoute);
   app.use('/admin', adminRoute);
   app.use('/api', router);
   app.use('/gk',gkRoute);

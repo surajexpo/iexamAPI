@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const userSchema = require("../../../models/authModels/userModel"); 
+const { User } = require("../../../models/authModels"); 
 const updateUserProfile = async (req, res) => {
   try {
     const { userId } = req.params; // userId from URL
@@ -37,8 +37,9 @@ const updateUserProfile = async (req, res) => {
       }
     }
 
+    
     // Find user and update
-    const updatedUser = await userSchema.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: filteredUpdates },
       { new: true, runValidators: true }

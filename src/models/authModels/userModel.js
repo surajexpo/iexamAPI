@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
         },
         email: {
           type: String,
-          require: true,
+          required: true,
           unique: true,
           lowercase: true,
           validate: {
@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema(
         },
         mobile_number: {
           type: Number,
+          validate: {
+    validator: v => /^[0-9]{10}$/.test(v), // India specific example
+    message: 'Invalid mobile number'
+  }
         },
         password: {
           type: String,
@@ -36,7 +40,7 @@ const userSchema = new mongoose.Schema(
         },
         profileImage: {
             type: String,
-            default: 'default.jpg'
+            default: '/images/default.jpg'
           },
           createdAt: {
             type: Date,
@@ -109,9 +113,10 @@ userSchema.pre("save", async function (next) {
       const isMatch = await bcrypt.compare(candidatePassword, this.password);
       return isMatch;
     } catch (err) {
-      return next(err);
+     throw new Error("Error while comparing password");
     }
   };
+
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

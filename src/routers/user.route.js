@@ -1,11 +1,12 @@
 const userRoute = require("express").Router();
-const { updateUserProfile, updateProfile, sendOTP, verifyOTP, signup,login,getUserById,getAllUsers } = require("../controllers/userController");
+const { updateUserProfile, updateProfile, sendOTP, verifyOTP, signup,login,getUserById,getAllUsers ,changePassword} = require("../controllers/userController");
 const { authenticateUser, fileUploader } = require("../middlewares");
 
 //---------- user auth ----------
 // userRoute.post("/profile", authenticateUser, profile);
 userRoute.post("/:userId/profile", updateUserProfile);
 userRoute.get("/:userId", getUserById);
+userRoute.put("/:userId/change-password", changePassword);
 userRoute.get("/", getAllUsers);
 userRoute.post("/updateprofile", authenticateUser, fileUploader(
     [

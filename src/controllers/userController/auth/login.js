@@ -38,7 +38,8 @@ const login = async (req, res,next) => {
         data: {
           user: {
             id: user._id,
-            email: user.name,
+            email: user.email,
+            name:user.name,
             // Add other non-sensitive user fields if needed
           }
         }

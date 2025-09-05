@@ -36,12 +36,7 @@ const login = async (req, res,next) => {
         status: "success",
         token,
         data: {
-          user: {
-            id: user._id,
-            email: user.email,
-            name:user.name,
-            // Add other non-sensitive user fields if needed
-          }
+          user: user
         }
       });
   

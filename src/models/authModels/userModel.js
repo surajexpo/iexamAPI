@@ -1,95 +1,101 @@
 const mongoose = require("mongoose");
-const bcrypt =require('bcrypt');
+const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema(
-    {
-        name: {
-          type: String,
+  {
+    name: {
+      type: String,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      validate: {
+        validator: function (v) {
+          return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
         },
-        email: {
-          type: String,
-          required: true,
-          unique: true,
-          lowercase: true,
-          validate: {
-            validator: function (v) {
-              return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
-            },
-            message: "{VALUE} is not a valid email",
-          },
-        },
-        mobile_number: {
-          type: Number,
-          validate: {
-    validator: v => /^[0-9]{10}$/.test(v), // India specific example
-    message: 'Invalid mobile number'
-  }
-        },
-        password: {
-          type: String,
-          required: true,
-         
-        },
-        is_active_email: {
-          type: Boolean,
-          default: false,
-        },
-        role: {
-          type: String,
-          enum: ['user', 'admin', 'moderator'],
-          default: "user",
-        },
-        profileImage: {
-            type: String,
-            default: '/images/default.jpg'
-          },
-          createdAt: {
-            type: Date,
-            default: Date.now
-          },
-          address: {
-            street: {
-              type: String,
-              trim: true,
-              maxlength: [100, 'Street address cannot exceed 100 characters']
-            },
-            city: {
-              type: String,
-              trim: true,
-              maxlength: [50, 'City name cannot exceed 50 characters']
-            },
-            state: {
-              type: String,
-              trim: true,
-              maxlength: [50, 'State name cannot exceed 50 characters']
-            },
-            zipCode: {
-              type: String,
-              trim: true,
-              maxlength: [20, 'Zip code cannot exceed 20 characters'],
-              validate: {
-                validator: function(value) {
-                  // Basic postal code validation - adjust based on your needs
-                  return /^[a-z0-9\- ]+$/i.test(value);
-                },
-                message: 'Invalid zip code format'
-              }
-            },
-            country: {
-              type: String,
-              trim: true,
-              maxlength: [50, 'Country name cannot exceed 50 characters'],
-              default: 'United States'
-            },
-          },
-        term_and_condition: {
-          type: Boolean,
-          default: true,
-        },
-        is_active: {
-          type: Boolean,
-          default: true,
-        },
+        message: "{VALUE} is not a valid email",
       },
+    },
+    mobile_number: {
+      type: Number,
+      validate: {
+        validator: v => /^[0-9]{10}$/.test(v), // India specific example
+        message: 'Invalid mobile number'
+      }
+    },
+    password: {
+      type: String,
+      required: true,
+
+    },
+    is_active_email: {
+      type: Boolean,
+      default: false,
+    },
+    role: {
+      type: String,
+      enum: ['user', 'admin', 'moderator'],
+      default: "user",
+    },
+    profileImage: {
+      data: {
+        type: Buffer,
+        required: true
+      },
+      contentType: {
+        type: String,
+        required: true
+      }
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    },
+    address: {
+      street: {
+        type: String,
+        trim: true,
+        maxlength: [100, 'Street address cannot exceed 100 characters']
+      },
+      city: {
+        type: String,
+        trim: true,
+        maxlength: [50, 'City name cannot exceed 50 characters']
+      },
+      state: {
+        type: String,
+        trim: true,
+        maxlength: [50, 'State name cannot exceed 50 characters']
+      },
+      zipCode: {
+        type: String,
+        trim: true,
+        maxlength: [20, 'Zip code cannot exceed 20 characters'],
+        validate: {
+          validator: function (value) {
+            // Basic postal code validation - adjust based on your needs
+            return /^[a-z0-9\- ]+$/i.test(value);
+          },
+          message: 'Invalid zip code format'
+        }
+      },
+      country: {
+        type: String,
+        trim: true,
+        maxlength: [50, 'Country name cannot exceed 50 characters'],
+        default: 'United States'
+      },
+    },
+    term_and_condition: {
+      type: Boolean,
+      default: true,
+    },
+    is_active: {
+      type: Boolean,
+      default: true,
+    },
+  },
   {
     timestamps: true,
     collection: "users",
@@ -97,26 +103,24 @@ const userSchema = new mongoose.Schema(
   }
 );
 userSchema.pre("save", async function (next) {
-    const person = this;
-    if (!person.isModified("password")) return next();
-    try {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(person.password, salt);
-      person.password = hashedPassword;
-      next();
-    } catch (err) {
-      return next(err);
-    }
-  });
-  userSchema.methods.comparePassword = async function (candidatePassword) {
-    try {
-      const isMatch = await bcrypt.compare(candidatePassword, this.password);
-      return isMatch;
-    } catch (err) {
-     throw new Error("Error while comparing password");
-    }
-  };
-
-
+  const person = this;
+  if (!person.isModified("password")) return next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(person.password, salt);
+    person.password = hashedPassword;
+    next();
+  } catch (err) {
+    return next(err);
+  }
+});
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  try {
+    const isMatch = await bcrypt.compare(candidatePassword, this.password);
+    return isMatch;
+  } catch (err) {
+    throw new Error("Error while comparing password");
+  }
+};
 const User = mongoose.model("User", userSchema);
 module.exports = User;

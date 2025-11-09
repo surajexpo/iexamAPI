@@ -21,6 +21,7 @@ const allowedMimeTypes = [
 ];
 
 const fileUploader = (field, folder) => {
+  console.log("Initializing file uploader for folder:", folder);
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       if (!fs.existsSync(`public/${folder}`)) {

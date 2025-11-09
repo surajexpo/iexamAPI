@@ -16,6 +16,7 @@ module.exports = {
     signup,
     login,
     getUserById,
-    getAllUsers
+    getAllUsers,
+   
 };
 

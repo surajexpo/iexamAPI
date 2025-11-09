@@ -4,7 +4,8 @@ const { authenticateUser, fileUploader } = require("../middlewares");
 
 //---------- user auth ----------
 // userRoute.post("/profile", authenticateUser, profile);
-userRoute.put("/:userId/profile", updateUserProfile);
+userRoute.put("/:userId/profile",fileUploader([{ name: "profileImage", maxCount: 1 }], "User"), updateUserProfile);
+userRoute.post("/update-profile-image", authenticateUser, fileUploader);
 userRoute.get("/:userId", getUserById);
 userRoute.put("/:userId/change-password", changePassword);
 userRoute.get("/", getAllUsers);

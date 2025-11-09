@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
-const { User } = require("../../../models/authModels"); 
+const fs = require("fs");
+const path = require("path");
+const { User } = require("../../../models/authModels");
+
 const updateUserProfile = async (req, res) => {
   try {
     const { userId } = req.params; // userId from URL
@@ -13,7 +16,7 @@ const updateUserProfile = async (req, res) => {
       });
     }
 
-    // Only allow specific fields to be updated
+    // Allowed fields for updates
     const allowedUpdates = [
       "name",
       "mobile_number",
@@ -25,7 +28,6 @@ const updateUserProfile = async (req, res) => {
       "address.country"
     ];
 
-    // Filter updates to prevent updating restricted fields
     const filteredUpdates = {};
     for (const key of allowedUpdates) {
       const keys = key.split(".");
@@ -37,13 +39,26 @@ const updateUserProfile = async (req, res) => {
       }
     }
 
-    
-    // Find user and update
+    // ✅ Handle uploaded image (from multer)
+    if (req.files && req.files.profileImage && req.files.profileImage.length > 0) {
+      const file = req.files.profileImage[0];
+      const relativePath = `/public/User/${file.filename}`;
+
+      // Remove old profile image if exists
+      const existingUser = await User.findById(userId);
+      if (existingUser?.profileImage && fs.existsSync(path.join(__dirname, `../../../${existingUser.profileImage}`))) {
+        fs.unlinkSync(path.join(__dirname, `../../../${existingUser.profileImage}`));
+      }
+
+      filteredUpdates.profileImage = relativePath;
+    }
+
+    // Update the user
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: filteredUpdates },
       { new: true, runValidators: true }
-    ).select("-password"); // Exclude password
+    ).select("-password");
 
     if (!updatedUser) {
       return res.status(404).json({
@@ -57,6 +72,7 @@ const updateUserProfile = async (req, res) => {
       message: "Profile updated successfully.",
       data: updatedUser
     });
+
   } catch (err) {
     console.error("Error updating profile:", err);
     res.status(500).json({

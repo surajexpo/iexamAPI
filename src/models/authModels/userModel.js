@@ -39,14 +39,8 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
     profileImage: {
-      data: {
-        type: Buffer,
-        required: true
-      },
-      contentType: {
-        type: String,
-        required: true
-      }
+      type: String,
+  default: ""
     },
     createdAt: {
       type: Date,

@@ -7,6 +7,7 @@ const addCurrentAffairs = async (req, res) => {
     const {
       title,
       description,
+      createdBy,
       summary,
       date,
       category,
@@ -21,6 +22,7 @@ const addCurrentAffairs = async (req, res) => {
     const currentAffair = new CurrentAffairs({
       title,
       description,
+      createdBy,
       summary,
       date,
       category,

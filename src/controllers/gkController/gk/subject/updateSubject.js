@@ -4,7 +4,7 @@ const GkSubject = require("../../../../models/gkModels");
 const updateSubject = async (req, res) => {
   try {
     const { subjectId } = req.params;
-    const { name, description, isActive } = req.body;
+    const { name, description, isActive,createdBy } = req.body;
 
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(subjectId)) {
@@ -19,6 +19,7 @@ const updateSubject = async (req, res) => {
     if (name !== undefined) updateFields.name = name;
     if (description !== undefined) updateFields.description = description;
     if (isActive !== undefined) updateFields.isActive = isActive;
+    if (createdBy !== undefined) updateFields.createdBy = createdBy;
     updateFields.updatedAt = Date.now();
 
     // Update subject

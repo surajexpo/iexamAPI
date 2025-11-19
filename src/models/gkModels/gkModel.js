@@ -9,6 +9,7 @@ const qaSchema = new Schema({
   }, { _id: true });
   const headingSchema = new Schema({
     title: { type: String, required: true },
+    createdBy: { type: Schema.Types.ObjectId, required:true, ref: 'User' },
     description: { type: String },
     qaPairs: [qaSchema],  // Nested Q&A pairs
     createdAt: { type: Date, default: Date.now }
@@ -17,6 +18,7 @@ const qaSchema = new Schema({
   const subjectSchema = new Schema({
     name: { type: String, required: true, unique: true },
     description: { type: String },
+    createdBy: { type: Schema.Types.ObjectId, required:true, ref: 'User' },
     headings: [headingSchema],  // Nested headings
     isActive: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },

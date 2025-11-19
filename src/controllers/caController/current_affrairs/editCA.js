@@ -3,7 +3,7 @@ const CurrentAffairs = require('../../../models/currentAffrairsModels');
 const editCurrentAffairs = async (req, res) => {
   try {
     const { id } = req.params; // Current affair ID from URL
-    const { title, description, category, date, isImportant } = req.body;
+    const { title, description, category, date, isImportant,createdBy } = req.body;
 
     // Check if record exists
     const existingRecord = await CurrentAffairs.findById(id);
@@ -16,6 +16,7 @@ const editCurrentAffairs = async (req, res) => {
 
     // Update fields only if provided
     if (title !== undefined) existingRecord.title = title;
+    if(createdBy !== undefined) existingRecord.createdBy = createdBy;
     if (description !== undefined) existingRecord.description = description;
     if (category !== undefined) existingRecord.category = category;
     if (date !== undefined) existingRecord.date = new Date(date);

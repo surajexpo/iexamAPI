@@ -4,9 +4,8 @@ const GkSubject = require('../../../../models/gkModels');
 const addGkHeading = async (req, res) => {
   try {
     const { subjectId } = req.params;
-    const { title, description, order } = req.body;
+    const { title, description, order, } = req.body;
 
-    // Validate subjectId
     if (!mongoose.Types.ObjectId.isValid(subjectId)) {
       return res.status(400).json({
         success: false,
@@ -14,7 +13,6 @@ const addGkHeading = async (req, res) => {
       });
     }
 
-    // Validate required field
     if (!title) {
       return res.status(400).json({
         success: false,
@@ -22,7 +20,6 @@ const addGkHeading = async (req, res) => {
       });
     }
 
-    // Find subject
     const subject = await GkSubject.findById(subjectId);
     if (!subject) {
       return res.status(404).json({
@@ -31,7 +28,6 @@ const addGkHeading = async (req, res) => {
       });
     }
 
-    // Check for duplicate heading (case-insensitive)
     const existingHeading = subject.headings.find(
       h => h.title.trim().toLowerCase() === title.trim().toLowerCase()
     );
@@ -43,7 +39,6 @@ const addGkHeading = async (req, res) => {
       });
     }
 
-    // Create new heading
     const newHeading = {
       title: title.trim(),
       description: description?.trim() || '',

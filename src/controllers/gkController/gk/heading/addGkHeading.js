@@ -4,7 +4,7 @@ const GkSubject = require('../../../../models/gkModels');
 const addGkHeading = async (req, res) => {
   try {
     const { subjectId } = req.params;
-    const { title, description, order, } = req.body;
+    const { title, description, createdBy, } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(subjectId)) {
       return res.status(400).json({
@@ -19,7 +19,6 @@ const addGkHeading = async (req, res) => {
         message: "Heading title is required.",
       });
     }
-
     const subject = await GkSubject.findById(subjectId);
     if (!subject) {
       return res.status(404).json({
@@ -41,6 +40,7 @@ const addGkHeading = async (req, res) => {
 
     const newHeading = {
       title: title.trim(),
+      createdBy,
       description: description?.trim() || '',
       qaPairs: [],
       order: order || 0,

@@ -8,6 +8,12 @@ const CurrentAffairsSchema = new Schema({
    trim: true,
     maxlength: [200, 'Title cannot exceed 200 characters']
   },
+  createdBy:{
+    type: Schema.Types.ObjectId,
+     required:true,
+      ref: 'User'
+
+  },
   description: {
     type: String,
     required: [true, 'Description is required'],

@@ -15,9 +15,9 @@ const getAllGkHeadings = async (req, res) => {
 
     // const subject = await GkSubject.findById(subjectId).select('name headings');
     const subject = await GkSubject.findById(subjectId)
-  .select('name headings.title headings.description headings.createdAt headings._id'); // exclude qaPairs
+  .select('name headings.title headings.description headings.createdAt headings._id headings.createdBy'); // exclude qaPairs
 
-    if (!subject) {
+    if (!subject) {    
       return res.status(404).json({
         success: false,
         message: 'Subject not found.',
@@ -27,6 +27,7 @@ const headings = subject.headings.map(h => ({
   _id: h._id,
   title: h.title,
   description: h.description,
+  createdBy:h.createdBy,
   createdAt: h.createdAt
 }));
 res.status(200).json({

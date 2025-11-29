@@ -43,7 +43,7 @@ const addGkHeading = async (req, res) => {
       createdBy,
       description: description?.trim() || '',
       qaPairs: [],
-      order: order || 0,
+     
       createdAt: new Date(),
       updatedAt: new Date(),
     };

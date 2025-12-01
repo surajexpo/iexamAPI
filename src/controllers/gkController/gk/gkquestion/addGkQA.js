@@ -59,7 +59,6 @@ const addQuestionAnswer = async (req, res) => {
       question: question.trim(),
       answer: answer.trim(),
       createdBy: createdBy || null,
-      lastUpdated: new Date()
     };
 
     heading.qaPairs.push(newQAPair);

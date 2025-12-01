@@ -2,17 +2,20 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 // Question & Answer Schema
 const qaSchema = new Schema({
-    question: { type: String, required: true },
+    question: { type: String, required: true,unique:true },
     answer: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId,required:true, ref: 'User' },
-    lastUpdated: { type: Date, default: Date.now }
+
+    updatedAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now }
   }, { _id: true });
   const headingSchema = new Schema({
     title: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId, required:true, ref: 'User' },
     description: { type: String },
     qaPairs: [qaSchema],  // Nested Q&A pairs
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
   }, { _id: true });
 
   const subjectSchema = new Schema({

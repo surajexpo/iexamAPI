@@ -50,15 +50,16 @@ const addQuestionToQuiz = async (req, res) => {
     }
 
     // Add question
-    quiz.questions.push(newQuestion);
+    const addedQuestion = quiz.questions.push(newQuestion);
     quiz.updatedAt = new Date();
 
-    const updatedQuiz = await quiz.save();
+    await quiz.save();
+    const savedQuestion = quiz.questions[quiz.questions.length - 1];
 
     return res.status(200).json({
       success: true,
       message: 'Question added successfully.',
-      data: updatedQuiz
+      data: savedQuestion
     });
   } catch (err) {
     console.error('Error adding question:', err);

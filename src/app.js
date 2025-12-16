@@ -13,7 +13,7 @@ app.use(express.json({ limit: "100kb" }));
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: ['http://localhost:4200','http://iexam-dashboard.surajexpo.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // if using cookies/sessions

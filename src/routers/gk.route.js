@@ -29,8 +29,4 @@ gkRoute.post("/gkSubject/:subjectId/:headingId/add-question-answer",addGkQA);
 gkRoute.put("/gkSubject/:subjectId/:headingId/updateqa/:qaId",updateGkQA);
 gkRoute.delete("/gkSubject/:subjectId/:headingId/deleteqa/:qaId",deleteGkQA);
 gkRoute.get("/gkSubject/:subjectId/:headingId/getAllQA",getAllQuestionAnswers);
-
-
-
-
 module.exports=gkRoute;

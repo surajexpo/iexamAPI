@@ -12,8 +12,21 @@ app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(express.json({ limit: "100kb" }));
 
 // Enhanced CORS configuration
+const allowedOrigins = [
+  'http://localhost:4200',
+  'https://iexam-dashboard.surajexpo.com'
+];
 app.use(cors({
-  origin: ['http://localhost:4200','http://iexam-dashboard.surajexpo.com'],
+  origin: function (origin, callback) {
+    // Allow server-to-server tools (Postman, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'), false);
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // if using cookies/sessions

@@ -5,7 +5,7 @@ const Banners = require("../../../models/banners");
 const updateBanner = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description } = req.body;
+    const { title, description,isActive,redirectUrl } = req.body;
 
     // 🔍 Find banner
     const banner = await Banners.findById(id);
@@ -32,6 +32,8 @@ const updateBanner = async (req, res) => {
     // 📝 Update other fields
     if (title) banner.title = title;
     if (description) banner.description = description;
+    if (redirectUrl) banner.redirectUrl = redirectUrl;
+    if (isActive) banner.isActive = isActive;
 
     // 💾 Save changes
     await banner.save();

@@ -4,6 +4,7 @@ const bannerSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
+      unique:true,trim: true
     },
     image: {
       type: String,
@@ -14,9 +15,11 @@ const bannerSchema = new mongoose.Schema(
     },
     redirectUrl: {
       type: String,
+      default:""
     },
     isActive:{
-        type:Boolean
+        type:Boolean,
+        default:true
     }
   },
   { timestamps: true }

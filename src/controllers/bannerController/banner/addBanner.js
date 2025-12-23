@@ -3,7 +3,7 @@ const Banners = require('../../../models/banners');
 
 const addBanner = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description,isActive,redirectUrl } = req.body;
 
     if (!title) {
       return res.status(400).json({
@@ -27,6 +27,8 @@ const addBanner = async (req, res) => {
       title,
       image: imagePath,
       description: description || "",
+      redirectUrl,
+      isActive,
     });
 
     await banner.save();
